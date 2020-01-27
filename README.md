@@ -79,10 +79,6 @@ must be set to 0. The immediately flag has no way to skip WebdriverIO's implicit
 ### WebdriverIO
 
 Only intended to be compatible with Webdriver 5 right now.
-| WebdriverIO version | Compatible `chai-webdriverio-async` version |
-| ---- | ---- |
-| 5.x.x | >= 1.0.0
-| 4.x.x | 0.4.3
 
 ### Node.js
 
@@ -95,7 +91,3 @@ Requires Node.js 8.x
 ## License
 
 Apache 2.0
-
-## Thanks
-
-Thanks to [goodeggs](https://github.com/goodeggs/) for creating: [chai-webdriver](https://github.com/goodeggs/chai-webdriver) which inspired this module.
