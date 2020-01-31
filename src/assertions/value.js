@@ -33,7 +33,7 @@ export default function value(client, chai, utils, options) {
 
     if (!immediately) {
       try {
-        client.waitUntil(
+        await client.waitUntil(
           async () =>
             (await doesOneElementHaveValue(client, selector, expected)).result,
           config.defaultWait
