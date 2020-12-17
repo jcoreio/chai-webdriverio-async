@@ -26,13 +26,14 @@ All assertions start with a [WebdriverIO-compatible selector](http://webdriver.i
 
 Then, we can add our assertion to the chain.
 
-- `await expect(selector).to.be.there()` - Test whether [at least one] matching element exists in the DOM
+- `await expect(selector).to.be.existing()` - Test whether [at least one] matching element exists in the DOM
 - `await expect(selector).to.be.displayed()` - Test whether or not [at least one] matching element is displayed
+- `await expect(selector).to.be.focused()` - Test whether or not [at least one] matching element is focused
 - `await expect(selector).to.have.text('string')` - Test the text value of the selected element(s) against supplied string. Succeeds if at least one element matches exactly
 - `await expect(selector).to.have.text(/regex/)` - Test the text value of the selected element(s) against the supplied regular expression. Succeeds if at least one element matches
 - `await expect(selector).to.have.count(number)` - Test how many elements exist in the DOM with the supplied selector
 - `await expect(selector).to.have.value('x')` - Test that [at least one] selected element has the given value
-- `await expect(selector).to.have.focus()` - Test that [at least one] selected element has focus
+- `await expect(selector).to.have.focus()` - (alias for `to.be.focused()`)
 
 You can also always add a `not` in there to negate the assertion:
 
@@ -54,31 +55,11 @@ await chai
   .to.not.contain.text("I'm a kitty!")
 ```
 
-## Default Wait Time
-
-As an optional argument to the initializer, you can add an `options` object in this format:
-
-```javascript
-var options = { defaultWait: 500 } // 500ms
-chai.use(chaiWebdriver(browser, options))
-```
-
-The `defaultWait` parameter will cause chai-webdriverio to wait the specified number of milliseconds
-for a given selector to appear before failing (if it is not yet present on the page). You can use `immediately`
-to skip this default wait time:
-
-```javascript
-await expect(selector).to.immediately.have.text('string') // fails immediately if element is not found
-```
-
-**Beware:** For `immediately` to work, your [implicit wait time in WebdriverIO](http://webdriver.io/guide/testrunner/timeouts.html#Session-Implicit-Wait-Timeout)
-must be set to 0. The immediately flag has no way to skip WebdriverIO's implicit wait.
-
 ## Compatability
 
 ### WebdriverIO
 
-Only intended to be compatible with Webdriver 5 right now.
+Only intended to be compatible with Webdriver 5/6 right now.
 
 ### Node.js
 

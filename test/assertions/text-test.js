@@ -5,41 +5,48 @@
  */
 
 import chai, { expect } from 'chai'
-import sinonChai from 'sinon-chai'
 import FakeClient from '../stubs/fake-client'
 import FakeElement from '../stubs/fake-element'
-import text from '../../src/assertions/text'
-import immediately from '../../src/chains/immediately'
+import { describe, beforeEach, it } from 'mocha'
+import chaiWebdriverio from '../../src'
 
 const fakeClient = new FakeClient()
 const fakeElement1 = new FakeElement()
 const fakeElement2 = new FakeElement()
-
-//Using real chai, because it would be too much effort to stub/mock everything
-chai.use((chai, utils) => text(fakeClient, chai, utils))
-chai.use((chai, utils) => immediately(fakeClient, chai, utils))
-
-chai.use(sinonChai)
 
 describe('text', () => {
   beforeEach(() => {
     fakeClient.__resetStubs__()
     fakeElement1.__resetStubs__()
     fakeElement2.__resetStubs__()
+
+    chai.use(chaiWebdriverio(fakeClient))
   })
 
-  context("when element doesn't exist", () => {
+  describe(`When element doesn't exist`, function() {
     beforeEach(() => {
       fakeClient.$$.withArgs('.some-selector').resolves([])
     })
 
-    it("Should throw element doesn't exist error for strings", async () => {
-      await expect(expect('.some-selector').to.have.text('blablabla')).to.be
-        .rejected
+    describe('When not negated', function() {
+      it(`shoult reject`, async function() {
+        await expect('.some-selector')
+          .to.have.text('foo')
+          .to.be.rejectedWith(
+            'Expected element <.some-selector> to have text "foo", but no matching elements were found'
+          )
+      })
     })
-    it("Should throw element doesn't exist error for regular expressions", async () => {
-      await expect(expect('.some-selector').to.have.text(/blablabla/)).to.be
-        .rejected
+    describe('When negated', function() {
+      it(`shoult reject`, async function() {
+        await expect(
+          expect('.some-selector')
+            .to.not.have.text('foo')
+            .then(null)
+        ).to.be.rejectedWith(
+          'Expected element <.some-selector> to not have text "foo", but no matching elements were found'
+        )
+      })
     })
   })
 
@@ -51,155 +58,130 @@ describe('text', () => {
       fakeClient.$$.withArgs('.some-selector').resolves([fakeElement1])
     })
 
-    describe('When call is chained with Immediately', () => {
-      it('Should not wait till the element exists', async () => {
-        await expect('.some-selector')
-          .to.have.immediately()
-          .text(elementText)
-        expect(fakeClient.waitUntil).to.not.have.been.called
-      })
-      it('Should not throw an exception', async () => {
-        await expect('.some-selector')
-          .to.have.immediately()
-          .text(elementText)
-      })
-      describe('When negated', () => {
-        it('Should throw an error', async () => {
-          await expect(
-            expect('.some-selector')
-              .to.not.have.immediately()
-              .text(elementText)
-          ).to.be.rejected
-        })
-      })
-    })
-
-    describe('When element text matches string expectation', () => {
-      it('Should not throw an error', async () => {
+    describe(`When not negated`, function() {
+      it(`should resolve when text equals expectation`, async function() {
         await expect('.some-selector').to.have.text(elementText)
       })
-
-      describe('When negated', () => {
-        it('Should throw an error', async () => {
-          await expect(expect('.some-selector').to.not.have.text(elementText))
-            .to.be.rejected
-        })
+      it(`should resolve when text matches expectation`, async function() {
+        await expect('.some-selector').to.have.text(/give you up/)
       })
-    })
-
-    describe('When element text matches regex expectation', () => {
-      it('Should not throw an error', async () => {
-        await expect('.some-selector').to.have.text(/gon+a give/)
-      })
-
-      describe('When negated', () => {
-        it('Should throw an error', async () => {
-          await expect(expect('.some-selector').to.not.have.text(/gon+a give/))
-            .to.be.rejected
-        })
-      })
-    })
-
-    describe('When element text does not match string expectation', () => {
-      it('Should throw an error', async () => {
+      it(`should reject when text doesn't equal expectation`, async function() {
         await expect(
-          expect('.some-selector').to.have.text("dis don't match jack! 1#43@")
-        ).to.be.rejected
+          expect('.some-selector')
+            .to.have.text('blah')
+            .then(null)
+        ).to.be.rejectedWith(
+          'Expected element <.some-selector> to have text "blah", but only found: "Never gonna give you up"'
+        )
       })
-
-      describe('When negated', () => {
-        it('Should not throw an error', async () => {
-          await expect('.some-selector').to.not.have.text(
-            "dis don't match jack! 1#43@"
-          )
-        })
+      it(`should reject when text doesn't match expectation`, async function() {
+        await expect(
+          expect('.some-selector')
+            .to.have.text(/^gonna/)
+            .then(null)
+        ).to.be.rejectedWith(
+          'Expected element <.some-selector> to have text /^gonna/, but only found: "Never gonna give you up"'
+        )
       })
     })
 
-    describe('When element text does not match regex expectation', () => {
-      it('Should throw an error', async () => {
-        await expect(
-          expect('.some-selector').to.have.text(/dis don't match jack! 1#43@/)
-        ).to.be.rejected
+    describe(`When negated`, function() {
+      it(`should resolve when text doesn't equal expectation`, async function() {
+        await expect('.some-selector').to.not.have.text('blargh')
       })
-
-      describe('When negated', () => {
-        it('Should not throw an error', async () => {
-          await expect('.some-selector').to.not.have.text(
-            /dis don't match jack! 1#43@/
-          )
-        })
+      it(`should resolve when text doesn't match expectation`, async function() {
+        await expect('.some-selector').to.not.have.text(/foog/)
+      })
+      it(`should reject when text equals expectation`, async function() {
+        await expect(
+          expect('.some-selector')
+            .to.not.have.text(elementText)
+            .then(null)
+        ).to.be.rejectedWith(
+          `Expected element <.some-selector> to not have text "Never gonna give you up", but found: "Never gonna give you up"`
+        )
+      })
+      it(`should reject when text matches expectation`, async function() {
+        await expect(
+          expect('.some-selector')
+            .to.not.have.text(/gonna/)
+            .then(null)
+        ).to.be.rejectedWith(
+          'Expected element <.some-selector> to not have text /gonna/, but found: "Never gonna give you up"'
+        )
       })
     })
   })
+  describe(`When multiple elements exist`, function() {
+    let elementText1 = 'Never gonna give you up'
+    let elementText2 = 'Never gonna let you down'
 
-  describe('When multiple elements exists', () => {
-    let elementTexts = ['Never gonna give you up', 'Never gonna let you down']
     beforeEach(() => {
-      fakeElement1.getText.resolves(elementTexts[0])
-      fakeElement2.getText.resolves(elementTexts[1])
+      fakeElement1.getText.resolves(elementText1)
+      fakeElement2.getText.resolves(elementText2)
       fakeClient.$$.withArgs('.some-selector').resolves([
         fakeElement1,
         fakeElement2,
       ])
     })
 
-    describe("When at least one element's text matches string expectation", () => {
-      it('Should not throw an error', async () => {
-        await expect('.some-selector').to.have.text(elementTexts[0])
+    describe(`When not negated`, function() {
+      it(`should resolve when text equals expectation`, async function() {
+        await expect('.some-selector').to.have.text(elementText1)
+        await expect('.some-selector').to.have.text(elementText2)
       })
-
-      describe('When negated', () => {
-        it('Should throw an error', async () => {
+      it(`should resolve when text matches expectation`, async function() {
+        await expect('.some-selector').to.have.text(/Never gonna/)
+        await expect('.some-selector').to.have.text(/give you up/)
+        await expect('.some-selector').to.have.text(/let you down/)
+      })
+      it(`should reject when text doesn't equal expectation`, async function() {
+        await expect(
+          expect('.some-selector')
+            .to.have.text('blah')
+            .then(null)
+        ).to.be.rejectedWith(
+          'Expected element <.some-selector> to have text "blah", but only found: "Never gonna give you up", "Never gonna let you down"'
+        )
+      })
+      it(`should reject when text doesn't match expectation`, async function() {
+        await expect(
+          expect('.some-selector')
+            .to.have.text(/^gonna/)
+            .then(null)
+        ).to.be.rejectedWith(
+          'Expected element <.some-selector> to have text /^gonna/, but only found: "Never gonna give you up", "Never gonna let you down"'
+        )
+      })
+    })
+    describe(`When negated`, function() {
+      it(`should resolve when text doesn't equal expectation`, async function() {
+        await expect('.some-selector').to.not.have.text('blargh')
+      })
+      it(`should resolve when text doesn't match expectation`, async function() {
+        await expect('.some-selector').to.not.have.text(/foog/)
+      })
+      it(`should reject when text equals expectation`, async function() {
+        for (const text of [elementText1, elementText2]) {
           await expect(
-            expect('.some-selector').to.not.have.text(elementTexts[0])
-          ).to.be.rejected
-        })
-      })
-    })
-
-    describe("When at least one element's text matches regex expectation", () => {
-      it('Should not throw an error', async () => {
-        await expect('.some-selector').to.have.text(/gon+a give/)
-      })
-
-      describe('When negated', () => {
-        it('Should throw an error', async () => {
-          await expect(expect('.some-selector').to.not.have.text(/gon+a give/))
-            .to.be.rejected
-        })
-      })
-    })
-
-    describe('When no element text matches string expectation', () => {
-      it('Should throw an error', async () => {
-        await expect(
-          expect('.some-selector').to.have.text("dis don't match jack! 1#43@")
-        ).to.be.rejected
-      })
-
-      describe('When negated', () => {
-        it('Should not throw an error', async () => {
-          await expect('.some-selector').to.not.have.text(
-            "dis don't match jack! 1#43@"
+            expect('.some-selector')
+              .to.not.have.text(text)
+              .then(null)
+          ).to.be.rejectedWith(
+            `Expected element <.some-selector> to not have text ${JSON.stringify(
+              text
+            )}, but found: "Never gonna give you up", "Never gonna let you down"`
           )
-        })
+        }
       })
-    })
-
-    describe('When no element text matches regex expectation', () => {
-      it('Should throw an error', async () => {
+      it(`should reject when text matches expectation`, async function() {
         await expect(
-          expect('.some-selector').to.have.text(/dis don't match jack! 1#43@/)
-        ).to.be.rejected
-      })
-
-      describe('When negated', () => {
-        it('Should not throw an error', async () => {
-          await expect('.some-selector').to.not.have.text(
-            /dis don't match jack! 1#43@/
-          )
-        })
+          expect('.some-selector')
+            .to.not.have.text(/gonna/)
+            .then(null)
+        ).to.be.rejectedWith(
+          'Expected element <.some-selector> to not have text /gonna/, but found: "Never gonna give you up", "Never gonna let you down"'
+        )
       })
     })
   })
