@@ -1,3 +1,4 @@
+import attribute from './assertions/attribute'
 import clickable from './assertions/clickable'
 import count from './assertions/count'
 import displayed from './assertions/displayed'
@@ -12,6 +13,7 @@ import value from './assertions/value'
 export default function(client, options = {}) {
   return function chaiWebdriverIO(chai, utils) {
     const methodsToAdd = {
+      attribute,
       clickable,
       count,
       displayed,

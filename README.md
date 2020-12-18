@@ -34,8 +34,13 @@ Then, we can add our assertion to the chain.
 - `await expect(selector).to.be.selected()` - Test whether or not [at least one] matching element is selected
 - `await expect(selector).to.have.text('string')` - Test the text value of the selected element(s) against supplied string. Succeeds if at least one element matches exactly
 - `await expect(selector).to.have.text(/regex/)` - Test the text value of the selected element(s) against the supplied regular expression. Succeeds if at least one element matches
+- `await expect(selector).to.have.text(/regex/)` - Test the text value of the selected element(s) against the supplied regular expression. Succeeds if at least one element matches
+- `await expect(selector).to.have.attribute('attributeName')` - Test whether [at least one] matching element has the given attribute
+- `await expect(selector).to.have.attribute('attributeName', 'string')` - Test the attribute value of the selected element(s) against supplied string. Succeeds if at least one element matches exactly
+- `await expect(selector).to.have.attribute('attributeName', /regex/)` - Test the attribute value of the selected element(s) against supplied regular expression. Succeeds if at least one element matches exactly
 - `await expect(selector).to.have.count(number)` - Test how many elements exist in the DOM with the supplied selector
-- `await expect(selector).to.have.value('x')` - Test that [at least one] selected element has the given value
+- `await expect(selector).to.have.value('string')` - Test that [at least one] selected element has a value matching the given string
+- `await expect(selector).to.have.value(/regex/)` - Test that [at least one] selected element has a value matching the given regular expression
 - `await expect(selector).to.have.focus()` - (alias for `to.be.focused()`)
 
 You can also always add a `not` in there to negate the assertion:
