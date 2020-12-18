@@ -29,7 +29,7 @@ describe('value', () => {
     })
 
     describe('When not negated', function() {
-      it(`shoult reject`, async function() {
+      it(`should reject`, async function() {
         await expect('.some-selector')
           .to.have.value('foo')
           .to.be.rejectedWith(
@@ -38,7 +38,7 @@ describe('value', () => {
       })
     })
     describe('When negated', function() {
-      it(`shoult reject`, async function() {
+      it(`should reject`, async function() {
         await expect(
           expect('.some-selector')
             .to.not.have.value('foo')

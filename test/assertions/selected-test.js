@@ -6,4 +6,4 @@
 
 import { booleanAssertionTest } from './booleanAssertionTest'
 
-booleanAssertionTest({ method: 'enabled' })
+booleanAssertionTest({ method: 'selected' })

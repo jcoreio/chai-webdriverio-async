@@ -26,9 +26,12 @@ All assertions start with a [WebdriverIO-compatible selector](http://webdriver.i
 
 Then, we can add our assertion to the chain.
 
-- `await expect(selector).to.be.existing()` - Test whether [at least one] matching element exists in the DOM
+- `await expect(selector).to.be.clickable()` - Test whether [at least one] matching element is clickable
 - `await expect(selector).to.be.displayed()` - Test whether or not [at least one] matching element is displayed
+- `await expect(selector).to.be.displayedInViewport()` - Test whether or not [at least one] matching element is displayed in viewport
+- `await expect(selector).to.be.existing()` - Test whether [at least one] matching element exists in the DOM
 - `await expect(selector).to.be.focused()` - Test whether or not [at least one] matching element is focused
+- `await expect(selector).to.be.selected()` - Test whether or not [at least one] matching element is selected
 - `await expect(selector).to.have.text('string')` - Test the text value of the selected element(s) against supplied string. Succeeds if at least one element matches exactly
 - `await expect(selector).to.have.text(/regex/)` - Test the text value of the selected element(s) against the supplied regular expression. Succeeds if at least one element matches
 - `await expect(selector).to.have.count(number)` - Test how many elements exist in the DOM with the supplied selector

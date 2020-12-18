@@ -1,22 +1,28 @@
-import existing from './assertions/existing'
-import displayed from './assertions/displayed'
+import clickable from './assertions/clickable'
 import count from './assertions/count'
+import displayed from './assertions/displayed'
+import displayedInViewport from './assertions/displayedInViewport'
+import enabled from './assertions/enabled'
+import existing from './assertions/existing'
+import focused from './assertions/focused'
+import selected from './assertions/selected'
 import text from './assertions/text'
 import value from './assertions/value'
-import focused from './assertions/focused'
-import enabled from './assertions/enabled'
 
 export default function(client, options = {}) {
   return function chaiWebdriverIO(chai, utils) {
     const methodsToAdd = {
-      existing,
-      displayed,
+      clickable,
       count,
-      text,
-      value,
+      displayed,
+      displayedInViewport,
+      enabled,
+      existing,
       focus: focused,
       focused,
-      enabled,
+      selected,
+      text,
+      value,
     }
 
     for (const name in methodsToAdd) {

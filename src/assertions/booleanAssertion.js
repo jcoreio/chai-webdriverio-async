@@ -18,8 +18,8 @@ const booleanAssertion = ({ predicate, expectation, allowNone }) => (
     if (!allowNone && !elements.length) {
       throw new chai.AssertionError(
         negate
-          ? `Expected <${selector}> to not be ${expectation} but no matching elements were found`
-          : `Expected <${selector}> to be ${expectation} but no matching elements were found`
+          ? `Expected element <${selector}> to not be ${expectation} but no matching elements were found`
+          : `Expected element <${selector}> to be ${expectation} but no matching elements were found`
       )
     }
 
@@ -29,8 +29,8 @@ const booleanAssertion = ({ predicate, expectation, allowNone }) => (
 
     this.assert(
       filteredList.length > 0,
-      `Expected <${selector}> to be ${expectation} but it is not`,
-      `Expected <${selector}> to not be ${expectation} but it is`
+      `Expected element <${selector}> to be ${expectation} but it is not`,
+      `Expected element <${selector}> to not be ${expectation} but it is`
     )
   }
 
