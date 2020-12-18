@@ -47,6 +47,13 @@ You can also always add a `not` in there to negate the assertion:
 
 - `await expect(selector).not.to.have.text('property')`
 
+## How to wait for one of these conditions to be true?
+
+Just use [`chai-wait-for`](https://github.com/jcoreio/chai-wait-for) and replace `expect` on any assertion with `waitFor`,
+where `waitFor` is created by calling `boundWaitFor`.
+
+[Do not use implicit wait all all, ever.](https://stackoverflow.com/questions/10404160/when-to-use-explicit-wait-vs-implicit-wait-in-selenium-webdriver/28067495#28067495).
+
 ## Setup
 
 Setup is pretty easy. Just:
