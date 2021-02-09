@@ -24,7 +24,7 @@ const attribute = (client, chai, utils, options) =>
         elements.map(async element => {
           const value = await element.getAttribute(attribute)
           values.push(value)
-          return value !== undefined
+          return value != null
         })
       )).filter(Boolean)
 

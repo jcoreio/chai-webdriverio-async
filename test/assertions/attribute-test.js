@@ -67,7 +67,7 @@ describe('attribute', () => {
 
     beforeEach(() => {
       fakeElement1.getAttribute.withArgs('foo').resolves(elementAttribute)
-      fakeElement1.getAttribute.withArgs('bar').resolves(undefined)
+      fakeElement1.getAttribute.withArgs('bar').resolves(null)
       fakeClient.$$.withArgs('.some-selector').resolves([fakeElement1])
     })
 
@@ -168,9 +168,9 @@ describe('attribute', () => {
       fakeElement1.getAttribute.resolves(elementAttribute1)
       fakeElement2.getAttribute.resolves(elementAttribute2)
       fakeElement1.getAttribute.withArgs('foo').resolves(elementAttribute1)
-      fakeElement1.getAttribute.withArgs('bar').resolves(undefined)
+      fakeElement1.getAttribute.withArgs('bar').resolves(null)
       fakeElement2.getAttribute.withArgs('foo').resolves(elementAttribute2)
-      fakeElement2.getAttribute.withArgs('bar').resolves(undefined)
+      fakeElement2.getAttribute.withArgs('bar').resolves(null)
       fakeClient.$$.withArgs('.some-selector').resolves([
         fakeElement1,
         fakeElement2,
