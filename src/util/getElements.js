@@ -1,5 +1,5 @@
 export default async function getElements(obj, client) {
-  if (obj instanceof Promise) {
+  if (obj && typeof obj.then === 'function') {
     const resolved = await obj
     const selector = obj.selector || String(resolved)
     if (typeof resolved === 'string') obj = resolved
