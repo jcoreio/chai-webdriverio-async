@@ -36,9 +36,21 @@ export const booleanAssertionTest = ({
         fakeElement1[`is${upperFirst(method)}`].resolves(true)
         await expect('.some-selector').to.be[method]()
       })
-      it(`resolves when element is ${expectation} -- via promise`, async function() {
+      it(`resolves when element is ${expectation} -- via promise resolving to array`, async function() {
+        fakeElement1[`is${upperFirst(method)}`].resolves(true)
+        await expect(Promise.resolve([fakeElement1])).to.be[method]()
+      })
+      it(`resolves when element is ${expectation} -- via promise resolving to element`, async function() {
         fakeElement1[`is${upperFirst(method)}`].resolves(true)
         await expect(Promise.resolve(fakeElement1)).to.be[method]()
+      })
+      it(`resolves when element is ${expectation} -- via array`, async function() {
+        fakeElement1[`is${upperFirst(method)}`].resolves(true)
+        await expect([fakeElement1]).to.be[method]()
+      })
+      it(`resolves when element is ${expectation} -- via element`, async function() {
+        fakeElement1[`is${upperFirst(method)}`].resolves(true)
+        await expect(fakeElement1).to.be[method]()
       })
       it(`rejects when element is not ${expectation}`, async function() {
         await expect('.some-selector')
