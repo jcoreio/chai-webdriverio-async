@@ -4,13 +4,17 @@
  * https://github.com/marcodejongh/chai-webdriverio
  */
 
+import getElements from '../util/getElements'
+
 const attribute = (client, chai, utils, options) =>
   async function(attribute, expected) {
-    const selector = utils.flag(this, 'object')
     const negate = utils.flag(this, 'negate')
 
+    const [elements, selector] = await getElements(
+      utils.flag(this, 'object'),
+      client
+    )
     if (arguments.length === 1) {
-      const elements = await client.$$(selector)
       if (!elements.length) {
         throw new chai.AssertionError(
           negate
@@ -43,7 +47,6 @@ const attribute = (client, chai, utils, options) =>
     const expectedStr =
       typeof expected === 'string' ? JSON.stringify(expected) : expected
 
-    const elements = await client.$$(selector)
     if (!elements.length) {
       throw new chai.AssertionError(
         negate

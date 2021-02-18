@@ -36,6 +36,10 @@ export const booleanAssertionTest = ({
         fakeElement1[`is${upperFirst(method)}`].resolves(true)
         await expect('.some-selector').to.be[method]()
       })
+      it(`resolves when element is ${expectation} -- via promise`, async function() {
+        fakeElement1[`is${upperFirst(method)}`].resolves(true)
+        await expect(Promise.resolve(fakeElement1)).to.be[method]()
+      })
       it(`rejects when element is not ${expectation}`, async function() {
         await expect('.some-selector')
           .to.be[method]()
@@ -43,6 +47,18 @@ export const booleanAssertionTest = ({
             `Expected element <.some-selector> to be ${expectation} but it is not`
           )
       })
+      it(`rejects when element is not ${expectation} -- via promise`, async function() {
+        await expect(
+          Object.assign(Promise.resolve(fakeElement1), {
+            selector: '.some-selector',
+          })
+        )
+          .to.be[method]()
+          .to.be.rejectedWith(
+            `Expected element <.some-selector> to be ${expectation} but it is not`
+          )
+      })
+
       it(`rejects when element does not exist`, async function() {
         await expect('.other-selector')
           .to.be[method]()

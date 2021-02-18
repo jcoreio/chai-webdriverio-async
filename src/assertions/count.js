@@ -4,11 +4,14 @@
  * https://github.com/marcodejongh/chai-webdriverio
  */
 
+import getElements from '../util/getElements'
+
 const count = (client, chai, utils, options) =>
   async function(expected) {
-    const selector = utils.flag(this, 'object')
-
-    const elements = await client.$$(selector)
+    const [elements, selector] = await getElements(
+      utils.flag(this, 'object'),
+      client
+    )
 
     this.assert(
       elements.length === expected,

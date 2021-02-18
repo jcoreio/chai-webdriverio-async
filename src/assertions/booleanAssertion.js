@@ -4,6 +4,8 @@
  * https://github.com/marcodejongh/chai-webdriverio
  */
 
+import getElements from '../util/getElements'
+
 const booleanAssertion = ({ predicate, expectation, allowNone }) => (
   client,
   chai,
@@ -11,10 +13,12 @@ const booleanAssertion = ({ predicate, expectation, allowNone }) => (
   options
 ) =>
   async function(expected) {
-    const selector = utils.flag(this, 'object')
     const negate = utils.flag(this, 'negate')
 
-    const elements = await client.$$(selector)
+    const [elements, selector] = await getElements(
+      utils.flag(this, 'object'),
+      client
+    )
     if (!allowNone && !elements.length) {
       throw new chai.AssertionError(
         negate

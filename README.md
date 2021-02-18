@@ -47,6 +47,26 @@ You can also always add a `not` in there to negate the assertion:
 
 - `await expect(selector).not.to.have.text('property')`
 
+## Assertions on promises resolving to elements
+
+You can also use the same assertions above on promises that resolve to an element or array of elements:
+
+```js
+await expect(browser.$('.foo')).to.be.clickable()
+```
+
+This allows you to use the [Page Object Pattern](https://webdriver.io/docs/pageobjects/).
+
+However, if an assertion fails, the error message won't contain the selector _unless_ you attach it to `promise.selector`, e.g.:
+
+```js
+await expect(
+  Object.assign(browser.$('.foo'), { selector: '.foo' })
+).to.be.clickable()
+```
+
+Obviously you wouldn't want to do this manually, but rather wrap the `browser` methods to attach the `selector` property.
+
 ## How to wait for one of these conditions to be true?
 
 Just use [`chai-wait-for`](https://github.com/jcoreio/chai-wait-for) and replace `expect` on any assertion with `waitFor`,
