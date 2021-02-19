@@ -52,96 +52,77 @@ export default function(client, options = {}) {
       }
     }
 
-    Assertion.overwriteMethod('above', function(_super) {
-      return function assertAbove(n) {
-        const ourFlag = utils.flag(this, 'chai-webdriverio-async')
-        if (ourFlag) {
-          return (async () => {
-            const { getValueAndSelector } = ourFlag
-
-            const [value, selector] = await getValueAndSelector()
-
-            this.assert(
-              value > n,
-              `Expected <${selector}> to appear in the DOM more than #{exp} times, but it shows up #{act} times instead.`,
-              `Expected <${selector}> not to appear in the DOM more than #{exp} times, but it shows up #{act} times instead.`,
-              n,
-              value
-            )
-          })()
-        } else {
-          _super.apply(this, arguments)
+    function overwriteMethod(name, handler) {
+      Assertion.overwriteMethod(name, function(_super) {
+        return function chaiWebdriverIOAssertion(...args) {
+          const ourFlag = utils.flag(this, 'chai-webdriverio-async')
+          if (ourFlag) {
+            return (async () => {
+              const { getValueAndSelector, ...rest } = ourFlag
+              const [value, selector] = await getValueAndSelector()
+              return handler.call(this, { ...rest, value, selector, args })
+            })()
+          } else {
+            _super.apply(this, arguments)
+          }
         }
-      }
+      })
+    }
+
+    overwriteMethod('above', function assertAbove({
+      value,
+      selector,
+      args: [n],
+    }) {
+      this.assert(
+        value > n,
+        `Expected <${selector}> to appear in the DOM more than #{exp} times, but it shows up #{act} times instead.`,
+        `Expected <${selector}> not to appear in the DOM more than #{exp} times, but it shows up #{act} times instead.`,
+        n,
+        value
+      )
     })
 
-    Assertion.overwriteMethod('least', function(_super) {
-      return function assertAtLeast(n) {
-        const ourFlag = utils.flag(this, 'chai-webdriverio-async')
-        if (ourFlag) {
-          return (async () => {
-            const { getValueAndSelector } = ourFlag
-
-            const [value, selector] = await getValueAndSelector()
-
-            this.assert(
-              value >= n,
-              `Expected <${selector}> to appear in the DOM at least #{exp} times, but it shows up #{act} times instead.`,
-              `Expected <${selector}> not to appear in the DOM at least #{exp} times, but it shows up #{act} times instead.`,
-              n,
-              value
-            )
-          })()
-        } else {
-          _super.apply(this, arguments)
-        }
-      }
+    overwriteMethod('least', function assertAtLeast({
+      value,
+      selector,
+      args: [n],
+    }) {
+      this.assert(
+        value >= n,
+        `Expected <${selector}> to appear in the DOM at least #{exp} times, but it shows up #{act} times instead.`,
+        `Expected <${selector}> not to appear in the DOM at least #{exp} times, but it shows up #{act} times instead.`,
+        n,
+        value
+      )
     })
 
-    Assertion.overwriteMethod('below', function(_super) {
-      return function assertBelow(n) {
-        const ourFlag = utils.flag(this, 'chai-webdriverio-async')
-        if (ourFlag) {
-          return (async () => {
-            const { getValueAndSelector } = ourFlag
-
-            const [value, selector] = await getValueAndSelector()
-
-            this.assert(
-              value < n,
-              `Expected <${selector}> to appear in the DOM less than #{exp} times, but it shows up #{act} times instead.`,
-              `Expected <${selector}> not to appear in the DOM less than #{exp} times, but it shows up #{act} times instead.`,
-              n,
-              value
-            )
-          })()
-        } else {
-          _super.apply(this, arguments)
-        }
-      }
+    overwriteMethod('below', function assertBelow({
+      value,
+      selector,
+      args: [n],
+    }) {
+      this.assert(
+        value < n,
+        `Expected <${selector}> to appear in the DOM less than #{exp} times, but it shows up #{act} times instead.`,
+        `Expected <${selector}> not to appear in the DOM less than #{exp} times, but it shows up #{act} times instead.`,
+        n,
+        value
+      )
     })
 
-    Assertion.overwriteMethod('most', function(_super) {
-      return function assertAtMost(n) {
-        const ourFlag = utils.flag(this, 'chai-webdriverio-async')
-        if (ourFlag) {
-          return (async () => {
-            const { getValueAndSelector } = ourFlag
-
-            const [value, selector] = await getValueAndSelector()
-
-            this.assert(
-              value <= n,
-              `Expected <${selector}> to appear in the DOM at most #{exp} times, but it shows up #{act} times instead.`,
-              `Expected <${selector}> not to appear in the DOM at most #{exp} times, but it shows up #{act} times instead.`,
-              n,
-              value
-            )
-          })()
-        } else {
-          _super.apply(this, arguments)
-        }
-      }
+    overwriteMethod('most', function assertAtMost({
+      value,
+      selector,
+      args: [n],
+    }) {
+      this.assert(
+        value <= n,
+        `Expected <${selector}> to appear in the DOM at most #{exp} times, but it shows up #{act} times instead.`,
+        `Expected <${selector}> not to appear in the DOM at most #{exp} times, but it shows up #{act} times instead.`,
+        n,
+        value
+      )
     })
   }
 }
