@@ -6,20 +6,28 @@
 
 import getElements from '../util/getElements'
 
-const count = (client, chai, utils, options) =>
-  async function(expected) {
-    const [elements, selector] = await getElements(
-      utils.flag(this, 'object'),
-      client
-    )
+const count = (client, chai, utils, options) => {
+  async function assertCount(expected) {
+    const { getValueAndSelector } = utils.flag(this, 'chai-webdriverio-async')
+    const [count, selector] = await getValueAndSelector()
 
     this.assert(
-      elements.length === expected,
-      `Expected <${selector}> to appear in the DOM ${expected} times, but it shows up ${
-        elements.length
-      } times instead.`,
+      count === expected,
+      `Expected <${selector}> to appear in the DOM ${expected} times, but it shows up ${count} times instead.`,
       `Expected <${selector}> not to appear in the DOM ${expected} times, but it does.`
     )
   }
+  assertCount.chain = function chainCount() {
+    const obj = utils.flag(this, 'object')
+    utils.flag(this, 'chai-webdriverio-async', {
+      type: 'count',
+      getValueAndSelector: async () => {
+        const [elements, selector] = await getElements(obj, client)
+        return [elements.length, selector]
+      },
+    })
+  }
+  return assertCount
+}
 
 export default count

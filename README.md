@@ -38,7 +38,11 @@ Then, we can add our assertion to the chain.
 - `await expect(selector).to.have.attribute('attributeName')` - Test whether [at least one] matching element has the given attribute
 - `await expect(selector).to.have.attribute('attributeName', 'string')` - Test the attribute value of the selected element(s) against supplied string. Succeeds if at least one element matches exactly
 - `await expect(selector).to.have.attribute('attributeName', /regex/)` - Test the attribute value of the selected element(s) against supplied regular expression. Succeeds if at least one element matches exactly
-- `await expect(selector).to.have.count(number)` - Test how many elements exist in the DOM with the supplied selector
+- `await expect(selector).to.have.count(n)` - Test that exactly `n` elements exist in the DOM with the supplied selector
+- `await expect(selector).to.have.count.above(n)` - Test that more than `n` elements exist in the DOM with the supplied selector
+- `await expect(selector).to.have.count.below(n)` - Test that less than `n` elements exist in the DOM with the supplied selector
+- `await expect(selector).to.have.count.at.least(n)` - Test that at least `n` elements exist in the DOM with the supplied selector
+- `await expect(selector).to.have.count.at.most(n)` - Test that at most `n` elements exist in the DOM with the supplied selector
 - `await expect(selector).to.have.value('string')` - Test that [at least one] selected element has a value matching the given string
 - `await expect(selector).to.have.value(/regex/)` - Test that [at least one] selected element has a value matching the given regular expression
 - `await expect(selector).to.have.focus()` - (alias for `to.be.focused()`)
