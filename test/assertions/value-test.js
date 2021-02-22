@@ -206,5 +206,84 @@ describe('value', () => {
         ).to.be.rejectedWith(`elements' values for <.some-selector>`)
       })
     })
+
+    describe(`With .members`, function() {
+      it(`resolves when all values are present`, async function() {
+        await expect('.some-selector').value.to.have.members([
+          elementValue2,
+          elementValue1,
+        ])
+        await expect('.some-selector').value.to.have.members([
+          elementValue1,
+          elementValue2,
+        ])
+      })
+      it(`rejects when excess actual values are present`, async function() {
+        await expect(
+          expect('.some-selector')
+            .value.to.have.members([elementValue1])
+            .then(null)
+        ).to.be.rejectedWith(
+          `elements' values for <.some-selector>: expected [ Array(2) ] to have the same members as`
+        )
+      })
+      it(`rejects when some expected values are missing`, async function() {
+        await expect(
+          expect('.some-selector')
+            .value.to.have.members([elementValue1, 'blah'])
+            .then(null)
+        ).to.be.rejectedWith(`elements' values for <.some-selector>`)
+      })
+    })
+
+    describe(`With .include/.contain/.includes`, function() {
+      it(`resolves when all values are present`, async function() {
+        await expect('.some-selector').value.to.include.members([
+          elementValue1,
+          elementValue2,
+        ])
+        await expect('.some-selector').value.to.include.members([
+          elementValue2,
+          elementValue1,
+        ])
+        await expect('.some-selector').value.to.include.members([elementValue1])
+        await expect('.some-selector').value.to.include.members([elementValue2])
+        await expect('.some-selector').value.to.contain(elementValue1)
+        await expect('.some-selector').value.to.include(elementValue2)
+        await expect('.some-selector').value.includes(elementValue2)
+        await expect('.some-selector').value.to.contain.oneOf([
+          'blah',
+          elementValue2,
+        ])
+      })
+      it(`rejects when some expected values are missing`, async function() {
+        await expect(
+          expect('.some-selector')
+            .value.to.include.members([elementValue1, 'blah'])
+            .then(null)
+        ).to.be.rejectedWith(
+          `elements' values for <.some-selector>: expected [ Array(2) ] to be a superset of`
+        )
+      })
+    })
+
+    describe(`With .satisfy`, function() {
+      it(`resolves when satisfies expression`, async function() {
+        await expect('.some-selector').value.to.satisfy(arr => arr.length === 2)
+        await expect('.some-selector').value.to.satisfy(
+          arr => arr[0] === elementValue1
+        )
+      })
+
+      it(`rejects when doesn't satisfy expression`, async function() {
+        await expect(
+          expect('.some-selector')
+            .value.to.satisfy(arr => arr[0] === elementValue2)
+            .then(null)
+        ).to.be.rejectedWith(
+          `elements' values for <.some-selector>: expected [ Array(2) ] to satisfy [Function]`
+        )
+      })
+    })
   })
 })

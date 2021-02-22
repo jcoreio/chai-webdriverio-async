@@ -180,7 +180,7 @@ describe('text', () => {
       })
     })
 
-    describe(`When not negated with .members`, function() {
+    describe(`With .members`, function() {
       it(`resolves when all texts are present`, async function() {
         await expect('.some-selector').text.to.have.members([
           elementText2,
