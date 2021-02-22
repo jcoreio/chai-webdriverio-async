@@ -35,6 +35,9 @@ Then, we can add our assertion to the chain.
 - `await expect(selector).to.have.text('string')` - Test the text value of the selected element(s) against supplied string. Succeeds if at least one element matches exactly
 - `await expect(selector).to.have.text(/regex/)` - Test the text value of the selected element(s) against the supplied regular expression. Succeeds if at least one element matches
 - `await expect(selector).to.have.text(/regex/)` - Test the text value of the selected element(s) against the supplied regular expression. Succeeds if at least one element matches
+- `await expect(selector).text.to.ordered.include.members(['foo', 'bar'])` - Test that the text of the selected elements includes `'foo'` followed by `'bar'`
+- `await expect(selector).text.to.have.members(['foo', 'bar'])` - Test that the text of the selected elements is exactly the set `['foo', 'bar']`, in any order
+- `await expect(selector).text.to.satisfy(fn)` - Test that `fn` returns `true` when called with the array of texts of the selected elements
 - `await expect(selector).to.have.attribute('attributeName')` - Test whether [at least one] matching element has the given attribute
 - `await expect(selector).to.have.attribute('attributeName', 'string')` - Test the attribute value of the selected element(s) against supplied string. Succeeds if at least one element matches exactly
 - `await expect(selector).to.have.attribute('attributeName', /regex/)` - Test the attribute value of the selected element(s) against supplied regular expression. Succeeds if at least one element matches exactly
@@ -45,6 +48,9 @@ Then, we can add our assertion to the chain.
 - `await expect(selector).to.have.count.at.most(n)` - Test that at most `n` elements exist in the DOM with the supplied selector
 - `await expect(selector).to.have.value('string')` - Test that [at least one] selected element has a value matching the given string
 - `await expect(selector).to.have.value(/regex/)` - Test that [at least one] selected element has a value matching the given regular expression
+- `await expect(selector).value.to.ordered.include.members(['foo', 'bar'])` - Test that the value of the selected elements includes `'foo'` followed by `'bar'`
+- `await expect(selector).value.to.have.members(['foo', 'bar'])` - Test that the value of the selected elements is exactly the set `['foo', 'bar']`, in any order
+- `await expect(selector).value.to.satisfy(fn)` - Test that `fn` returns `true` when called with the array of values of the selected elements
 - `await expect(selector).to.have.focus()` - (alias for `to.be.focused()`)
 
 You can also always add a `not` in there to negate the assertion:

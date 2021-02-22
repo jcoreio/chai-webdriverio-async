@@ -1,10 +1,8 @@
-import chai, { expect } from 'chai'
-
+import { expect } from 'chai'
 import { describe, beforeEach, afterEach, it } from 'mocha'
-import FakeClient from '../stubs/fake-client'
 import FakeElement from '../stubs/fake-element'
-import chaiWebdriverio from '../../src'
 import { upperFirst, lowerCase } from 'lodash'
+import fakeClient from '../stubs/fakeClient'
 
 export const booleanAssertionTest = ({
   method,
@@ -12,22 +10,17 @@ export const booleanAssertionTest = ({
   allowNone,
 }) =>
   describe(method, () => {
-    let fakeClient
     let fakeElement1
 
     beforeEach(() => {
-      fakeClient = new FakeClient()
       fakeElement1 = new FakeElement()
 
       fakeElement1[`is${upperFirst(method)}`].resolves(false)
       fakeClient.$$.withArgs('.some-selector').resolves([fakeElement1])
       fakeClient.$$.withArgs('.other-selector').resolves([])
-
-      chai.use(chaiWebdriverio(fakeClient))
     })
 
     afterEach(() => {
-      fakeClient.__resetStubs__()
       fakeElement1.__resetStubs__()
     })
 

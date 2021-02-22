@@ -4,26 +4,20 @@
  * https://github.com/marcodejongh/chai-webdriverio
  */
 
-import chai, { expect } from 'chai'
-import FakeClient from '../stubs/fake-client'
+import { expect } from 'chai'
 import FakeElement from '../stubs/fake-element'
-import chaiWebdriverio from '../../src/index'
+import { describe, beforeEach, it } from 'mocha'
+import fakeClient from '../stubs/fakeClient'
 
 describe('count', () => {
   let elements
-  let fakeClient
 
   beforeEach(() => {
     elements = [new FakeElement(), new FakeElement()]
-    fakeClient = new FakeClient()
 
     fakeClient.$$.rejects('ArgumentError')
     fakeClient.$$.withArgs('.some-selector').resolves(elements)
-
-    chai.use(chaiWebdriverio(fakeClient))
   })
-
-  afterEach(() => fakeClient.__resetStubs__())
 
   describe('When not negated', () => {
     it(`resolves when element count matches expectation`, async function() {
@@ -171,6 +165,38 @@ describe('count', () => {
           .then(null)
       ).to.be.rejectedWith(
         'Expected <.some-selector> not to appear in the DOM at most 2 times, but it shows up 2 times instead.'
+      )
+    })
+  })
+
+  describe(`when not negated with within`, function() {
+    it(`resolves when element count is within expectation`, async function() {
+      await expect('.some-selector').to.have.count.within(2, 4)
+      await expect('.some-selector').to.have.count.within(1, 2)
+      await expect('.some-selector').to.have.count.within(1, 4)
+    })
+    it(`rejects when element count is not within expectation`, async function() {
+      await expect(
+        expect('.some-selector')
+          .to.have.count.within(0, 1)
+          .then(null)
+      ).to.be.rejectedWith(
+        'Expected <.some-selector> to appear in the DOM between 0 and 1 times, but it shows up 2 times instead.'
+      )
+    })
+  })
+  describe(`when negated with within`, function() {
+    it(`resolves when element count is not within expectation`, async function() {
+      await expect('.some-selector').to.not.have.count.within(0, 1)
+      await expect('.some-selector').to.not.have.count.within(3, 4)
+    })
+    it(`rejects when element count is within expectation`, async function() {
+      await expect(
+        expect('.some-selector')
+          .to.not.have.count.within(1, 2)
+          .then(null)
+      ).to.be.rejectedWith(
+        'Expected <.some-selector> not to appear in the DOM between 1 and 2 times, but it shows up 2 times instead.'
       )
     })
   })

@@ -60,13 +60,62 @@ export default function(client, options = {}) {
             return (async () => {
               const { getValueAndSelector, ...rest } = ourFlag
               const [value, selector] = await getValueAndSelector()
-              return handler.call(this, { ...rest, value, selector, args })
+              if (!handler) return _super.apply(this, args)
+              return handler.call(this, {
+                ...rest,
+                _super,
+                value,
+                selector,
+                args,
+              })
             })()
           } else {
-            _super.apply(this, arguments)
+            _super.apply(this, args)
           }
         }
       })
+    }
+
+    function defaultOverwriteAssert(_super) {
+      return function chaiWebdriverIOAssertion(...args) {
+        const ourFlag = utils.flag(this, 'chai-webdriverio-async')
+        if (ourFlag) {
+          return (async () => {
+            const { getValueAndSelector, message } = ourFlag
+            const [value, selector] = await getValueAndSelector()
+            const assertion = new Assertion(value)
+            utils.transferFlags(this, assertion)
+            utils.flag(assertion, 'object', value)
+            if (message) {
+              utils.flag(
+                assertion,
+                'message',
+                [
+                  utils.flag(this, 'message'),
+                  message.replace(/#\{selector\}/g, `<${selector}>`),
+                ]
+                  .filter(Boolean)
+                  .join(': ')
+              )
+            }
+            return _super.apply(assertion, args)
+          })()
+        } else {
+          _super.apply(this, args)
+        }
+      }
+    }
+
+    function defaultOverwriteMethod(name) {
+      Assertion.overwriteMethod(name, defaultOverwriteAssert)
+    }
+
+    function defaultOverwriteChainableMethod(name) {
+      Assertion.overwriteChainableMethod(
+        name,
+        defaultOverwriteAssert,
+        chain => chain
+      )
     }
 
     overwriteMethod('above', function assertAbove({
@@ -124,5 +173,25 @@ export default function(client, options = {}) {
         value
       )
     })
+
+    overwriteMethod('within', function assertAtMost({
+      value,
+      selector,
+      args: [lower, upper],
+    }) {
+      this.assert(
+        value >= lower && value <= upper,
+        `Expected <${selector}> to appear in the DOM between ${lower} and ${upper} times, but it shows up ${value} times instead.`,
+        `Expected <${selector}> not to appear in the DOM between ${lower} and ${upper} times, but it shows up ${value} times instead.`
+      )
+    })
+
+    defaultOverwriteMethod('members')
+    defaultOverwriteMethod('oneOf')
+    defaultOverwriteMethod('satisfy')
+    defaultOverwriteChainableMethod('include')
+    defaultOverwriteChainableMethod('includes')
+    defaultOverwriteChainableMethod('contain')
+    defaultOverwriteChainableMethod('contains')
   }
 }

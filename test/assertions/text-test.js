@@ -4,23 +4,18 @@
  * https://github.com/marcodejongh/chai-webdriverio
  */
 
-import chai, { expect } from 'chai'
-import FakeClient from '../stubs/fake-client'
+import { expect } from 'chai'
 import FakeElement from '../stubs/fake-element'
 import { describe, beforeEach, it } from 'mocha'
-import chaiWebdriverio from '../../src'
+import fakeClient from '../stubs/fakeClient'
 
-const fakeClient = new FakeClient()
 const fakeElement1 = new FakeElement()
 const fakeElement2 = new FakeElement()
 
 describe('text', () => {
   beforeEach(() => {
-    fakeClient.__resetStubs__()
     fakeElement1.__resetStubs__()
     fakeElement2.__resetStubs__()
-
-    chai.use(chaiWebdriverio(fakeClient))
   })
 
   describe(`When element doesn't exist`, function() {
@@ -181,6 +176,85 @@ describe('text', () => {
             .then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to not have text /gonna/, but found: "Never gonna give you up", "Never gonna let you down"'
+        )
+      })
+    })
+
+    describe(`When not negated with .members`, function() {
+      it(`resolves when all texts are present`, async function() {
+        await expect('.some-selector').text.to.have.members([
+          elementText2,
+          elementText1,
+        ])
+        await expect('.some-selector').text.to.have.members([
+          elementText1,
+          elementText2,
+        ])
+      })
+      it(`rejects when excess actual texts are present`, async function() {
+        await expect(
+          expect('.some-selector')
+            .text.to.have.members([elementText1])
+            .then(null)
+        ).to.be.rejectedWith(
+          `elements' text for <.some-selector>: expected [ Array(2) ] to have the same members as`
+        )
+      })
+      it(`rejects when some expected texts are missing`, async function() {
+        await expect(
+          expect('.some-selector')
+            .text.to.have.members([elementText1, 'blah'])
+            .then(null)
+        ).to.be.rejectedWith(`elements' text for <.some-selector>`)
+      })
+    })
+
+    describe(`With .include/.contain/.includes`, function() {
+      it(`resolves when all texts are present`, async function() {
+        await expect('.some-selector').text.to.include.members([
+          elementText1,
+          elementText2,
+        ])
+        await expect('.some-selector').text.to.include.members([
+          elementText2,
+          elementText1,
+        ])
+        await expect('.some-selector').text.to.include.members([elementText1])
+        await expect('.some-selector').text.to.include.members([elementText2])
+        await expect('.some-selector').text.to.contain(elementText1)
+        await expect('.some-selector').text.to.include(elementText2)
+        await expect('.some-selector').text.includes(elementText2)
+        await expect('.some-selector').text.to.contain.oneOf([
+          'blah',
+          elementText2,
+        ])
+      })
+      it(`rejects when some expected texts are missing`, async function() {
+        await expect(
+          expect('.some-selector')
+            .text.to.include.members([elementText1, 'blah'])
+            .then(null)
+        ).to.be.rejectedWith(
+          `elements' text for <.some-selector>: expected [ Array(2) ] to be a superset of`
+        )
+      })
+    })
+
+    describe(`With .satisfy`, function() {
+      it(`resolves when satisfies expression`, async function() {
+        await expect('.some-selector').text.to.satisfy(arr => arr.length === 2)
+        await expect('.some-selector').text.to.satisfy(
+          arr => arr[0] === elementText1
+        )
+      })
+
+      it(`rejects when doesn't satisfy expression`, async function() {
+        await expect(
+          expect('.some-selector')
+            .text.to.satisfy(arr => arr[0] === elementText2)
+            .then(null)
+        ).to.be.rejectedWith(
+          `elements' text for <.some-selector>: expected [ Array(2) ] to satisfy [Function]`
         )
       })
     })

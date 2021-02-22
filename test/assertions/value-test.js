@@ -4,23 +4,18 @@
  * https://github.com/marcodejongh/chai-webdriverio
  */
 
-import chai, { expect } from 'chai'
-import FakeClient from '../stubs/fake-client'
+import { expect } from 'chai'
 import FakeElement from '../stubs/fake-element'
 import { describe, beforeEach, it } from 'mocha'
-import chaiWebdriverio from '../../src'
+import fakeClient from '../stubs/fakeClient'
 
-const fakeClient = new FakeClient()
 const fakeElement1 = new FakeElement()
 const fakeElement2 = new FakeElement()
 
 describe('value', () => {
   beforeEach(() => {
-    fakeClient.__resetStubs__()
     fakeElement1.__resetStubs__()
     fakeElement2.__resetStubs__()
-
-    chai.use(chaiWebdriverio(fakeClient))
   })
 
   describe(`When element doesn't exist`, function() {
@@ -182,6 +177,33 @@ describe('value', () => {
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to not have value /gonna/, but found: "Never gonna give you up", "Never gonna let you down"'
         )
+      })
+    })
+
+    describe(`When not negated with .members`, function() {
+      it(`resolves when all values are present`, async function() {
+        await expect('.some-selector').value.to.have.members([
+          elementValue2,
+          elementValue1,
+        ])
+        await expect('.some-selector').value.to.have.members([
+          elementValue1,
+          elementValue2,
+        ])
+      })
+      it(`rejects when excess actual values are present`, async function() {
+        await expect(
+          expect('.some-selector')
+            .value.to.have.members([elementValue1])
+            .then(null)
+        ).to.be.rejectedWith(`elements' values for <.some-selector>`)
+      })
+      it(`rejects when some expected values are missing`, async function() {
+        await expect(
+          expect('.some-selector')
+            .value.to.have.members([elementValue1, 'blah'])
+            .then(null)
+        ).to.be.rejectedWith(`elements' values for <.some-selector>`)
       })
     })
   })

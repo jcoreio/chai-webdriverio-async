@@ -4,23 +4,18 @@
  * https://github.com/marcodejongh/chai-webdriverio
  */
 
-import chai, { expect } from 'chai'
-import FakeClient from '../stubs/fake-client'
+import { expect } from 'chai'
 import FakeElement from '../stubs/fake-element'
 import { describe, beforeEach, it } from 'mocha'
-import chaiWebdriverio from '../../src'
+import fakeClient from '../stubs/fakeClient'
 
-const fakeClient = new FakeClient()
 const fakeElement1 = new FakeElement()
 const fakeElement2 = new FakeElement()
 
 describe('attribute', () => {
   beforeEach(() => {
-    fakeClient.__resetStubs__()
     fakeElement1.__resetStubs__()
     fakeElement2.__resetStubs__()
-
-    chai.use(chaiWebdriverio(fakeClient))
   })
 
   describe(`When element doesn't exist`, function() {

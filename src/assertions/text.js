@@ -6,18 +6,17 @@
 
 import getElements from '../util/getElements'
 
-const text = (client, chai, utils, options) =>
-  async function(expected) {
+const text = (client, chai, utils, options) => {
+  async function assertText(expected) {
     const negate = utils.flag(this, 'negate')
+
+    const { getValueAndSelector } = utils.flag(this, 'chai-webdriverio-async')
+    const [texts, selector] = await getValueAndSelector()
 
     const expectedStr =
       typeof expected === 'string' ? JSON.stringify(expected) : expected
 
-    const [elements, selector] = await getElements(
-      utils.flag(this, 'object'),
-      client
-    )
-    if (!elements.length) {
+    if (!texts.length) {
       throw new chai.AssertionError(
         negate
           ? `Expected element <${selector}> to not have text ${expectedStr}, but no matching elements were found`
@@ -25,16 +24,9 @@ const text = (client, chai, utils, options) =>
       )
     }
 
-    const texts = []
-    const filteredList = (await Promise.all(
-      elements.map(async element => {
-        const text = await element.getText()
-        texts.push(text)
-        return expected instanceof RegExp
-          ? text.match(expected)
-          : text === expected
-      })
-    )).filter(Boolean)
+    const filteredList = texts.filter(text =>
+      expected instanceof RegExp ? text.match(expected) : text === expected
+    )
 
     this.assert(
       filteredList.length > 0,
@@ -46,5 +38,18 @@ const text = (client, chai, utils, options) =>
         .join(', ')}`
     )
   }
+  assertText.chain = function chainText() {
+    const obj = utils.flag(this, 'object')
+    utils.flag(this, 'chai-webdriverio-async', {
+      type: 'text',
+      message: `elements' text for #{selector}`,
+      getValueAndSelector: async () => {
+        const [elements, selector] = await getElements(obj, client)
+        return [await Promise.all(elements.map(e => e.getText())), selector]
+      },
+    })
+  }
+  return assertText
+}
 
 export default text

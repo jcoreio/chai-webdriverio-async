@@ -3,7 +3,7 @@ import { getPrototype } from 'webdriverio/build/utils'
 
 const clientPrototype = getPrototype('browser')
 
-export default class FakeClient {
+class FakeClient {
   constructor() {
     const fakeClient = {}
     Object.keys(clientPrototype).forEach(
@@ -18,3 +18,5 @@ export default class FakeClient {
       .forEach(key => this[key].reset())
   }
 }
+
+export default new FakeClient()
