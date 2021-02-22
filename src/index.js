@@ -60,7 +60,6 @@ export default function(client, options = {}) {
             return (async () => {
               const { getValueAndSelector, ...rest } = ourFlag
               const [value, selector] = await getValueAndSelector()
-              if (!handler) return _super.apply(this, args)
               return handler.call(this, {
                 ...rest,
                 _super,
