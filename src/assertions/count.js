@@ -23,7 +23,7 @@ const count = (client, chai, utils, options) => {
       type: 'count',
       getValueAndSelector: async () => {
         const [elements, selector] = await getElements(obj, client)
-        return [elements.length, selector]
+        return [(await Promise.all(elements)).flat().length, selector]
       },
     })
   }

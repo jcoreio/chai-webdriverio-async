@@ -1,6 +1,9 @@
 export default async function getElements(obj, client) {
-  if (obj && typeof obj.then === 'function') {
-    const resolved = await obj
+  if (
+    obj &&
+    (typeof obj.isClickable === 'function' || typeof obj.then === 'function')
+  ) {
+    const resolved = typeof obj.isClickable === 'function' ? obj : await obj
     const selector = obj.selector || String(resolved)
     if (typeof resolved === 'string') obj = resolved
     else if (Array.isArray(resolved)) return [resolved, selector]

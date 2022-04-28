@@ -45,7 +45,10 @@ const value = (client, chai, utils, options) => {
       message: `elements' values for #{selector}`,
       getValueAndSelector: async () => {
         const [elements, selector] = await getElements(obj, client)
-        return [await Promise.all(elements.map(e => e.getValue())), selector]
+        return [
+          (await Promise.all(elements.map(e => e.getValue()))).flat(),
+          selector,
+        ]
       },
     })
   }
