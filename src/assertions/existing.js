@@ -7,7 +7,7 @@
 import booleanAssertion from './booleanAssertion'
 
 export default booleanAssertion({
-  predicate: el => el.isExisting(),
+  predicate: (el) => el.isExisting(),
   expectation: 'existing',
   allowNone: true,
 })

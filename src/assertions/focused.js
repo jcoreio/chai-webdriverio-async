@@ -7,7 +7,7 @@
 import booleanAssertion from './booleanAssertion'
 
 export default booleanAssertion({
-  predicate: el => el.isFocused(),
+  predicate: (el) => el.isFocused(),
   expectation: 'focused',
   allowNone: false,
 })

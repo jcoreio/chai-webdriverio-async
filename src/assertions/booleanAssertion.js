@@ -6,36 +6,33 @@
 
 import getElements from '../util/getElements'
 
-const booleanAssertion = ({ predicate, expectation, allowNone }) => (
-  client,
-  chai,
-  utils,
-  options
-) =>
-  async function(expected) {
-    const negate = utils.flag(this, 'negate')
+const booleanAssertion =
+  ({ predicate, expectation, allowNone }) =>
+  (client, chai, utils, options) =>
+    async function (expected) {
+      const negate = utils.flag(this, 'negate')
 
-    const [elements, selector] = await getElements(
-      utils.flag(this, 'object'),
-      client
-    )
-    if (!allowNone && !elements.length) {
-      throw new chai.AssertionError(
-        negate
-          ? `Expected element <${selector}> to not be ${expectation} but no matching elements were found`
-          : `Expected element <${selector}> to be ${expectation} but no matching elements were found`
+      const [elements, selector] = await getElements(
+        utils.flag(this, 'object'),
+        client
+      )
+      if (!allowNone && !elements.length) {
+        throw new chai.AssertionError(
+          negate
+            ? `Expected element <${selector}> to not be ${expectation} but no matching elements were found`
+            : `Expected element <${selector}> to be ${expectation} but no matching elements were found`
+        )
+      }
+
+      const filteredList = (await Promise.all(elements.map(predicate))).filter(
+        Boolean
+      )
+
+      this.assert(
+        filteredList.length > 0,
+        `Expected element <${selector}> to be ${expectation} but it is not`,
+        `Expected element <${selector}> to not be ${expectation} but it is`
       )
     }
-
-    const filteredList = (await Promise.all(elements.map(predicate))).filter(
-      Boolean
-    )
-
-    this.assert(
-      filteredList.length > 0,
-      `Expected element <${selector}> to be ${expectation} but it is not`,
-      `Expected element <${selector}> to not be ${expectation} but it is`
-    )
-  }
 
 export default booleanAssertion

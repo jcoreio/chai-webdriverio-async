@@ -24,17 +24,17 @@ const text = (client, chai, utils, options) => {
       )
     }
 
-    const filteredList = texts.filter(text =>
+    const filteredList = texts.filter((text) =>
       expected instanceof RegExp ? text.match(expected) : text === expected
     )
 
     this.assert(
       filteredList.length > 0,
       `Expected element <${selector}> to have text ${expectedStr}, but only found: ${texts
-        .map(t => JSON.stringify(t))
+        .map((t) => JSON.stringify(t))
         .join(', ')}`,
       `Expected element <${selector}> to not have text ${expectedStr}, but found: ${texts
-        .map(t => JSON.stringify(t))
+        .map((t) => JSON.stringify(t))
         .join(', ')}`
     )
   }
@@ -46,7 +46,7 @@ const text = (client, chai, utils, options) => {
       getValueAndSelector: async () => {
         const [elements, selector] = await getElements(obj, client)
         return [
-          (await Promise.all(elements.map(e => e.getText()))).flat(),
+          (await Promise.all(elements.map((e) => e.getText()))).flat(),
           selector,
         ]
       },

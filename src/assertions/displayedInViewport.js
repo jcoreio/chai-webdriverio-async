@@ -7,7 +7,7 @@
 import booleanAssertion from './booleanAssertion'
 
 export default booleanAssertion({
-  predicate: el => el.isDisplayedInViewport(),
+  predicate: (el) => el.isDisplayedInViewport(),
   expectation: 'displayed in viewport',
   allowNone: true,
 })

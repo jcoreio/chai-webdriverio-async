@@ -25,34 +25,34 @@ export const booleanAssertionTest = ({
     })
 
     describe('When not negated', () => {
-      it(`resolves when element is ${expectation}`, async function() {
+      it(`resolves when element is ${expectation}`, async function () {
         fakeElement1[`is${upperFirst(method)}`].resolves(true)
         await expect('.some-selector').to.be[method]()
       })
-      it(`resolves when element is ${expectation} -- via promise resolving to array`, async function() {
+      it(`resolves when element is ${expectation} -- via promise resolving to array`, async function () {
         fakeElement1[`is${upperFirst(method)}`].resolves(true)
         await expect(Promise.resolve([fakeElement1])).to.be[method]()
       })
-      it(`resolves when element is ${expectation} -- via promise resolving to element`, async function() {
+      it(`resolves when element is ${expectation} -- via promise resolving to element`, async function () {
         fakeElement1[`is${upperFirst(method)}`].resolves(true)
         await expect(Promise.resolve(fakeElement1)).to.be[method]()
       })
-      it(`resolves when element is ${expectation} -- via array`, async function() {
+      it(`resolves when element is ${expectation} -- via array`, async function () {
         fakeElement1[`is${upperFirst(method)}`].resolves(true)
         await expect([fakeElement1]).to.be[method]()
       })
-      it(`resolves when element is ${expectation} -- via element`, async function() {
+      it(`resolves when element is ${expectation} -- via element`, async function () {
         fakeElement1[`is${upperFirst(method)}`].resolves(true)
         await expect(fakeElement1).to.be[method]()
       })
-      it(`rejects when element is not ${expectation}`, async function() {
+      it(`rejects when element is not ${expectation}`, async function () {
         await expect('.some-selector')
           .to.be[method]()
           .to.be.rejectedWith(
             `Expected element <.some-selector> to be ${expectation} but it is not`
           )
       })
-      it(`rejects when element is not ${expectation} -- via promise`, async function() {
+      it(`rejects when element is not ${expectation} -- via promise`, async function () {
         await expect(
           Object.assign(Promise.resolve(fakeElement1), {
             selector: '.some-selector',
@@ -64,7 +64,7 @@ export const booleanAssertionTest = ({
           )
       })
 
-      it(`rejects when element does not exist`, async function() {
+      it(`rejects when element does not exist`, async function () {
         await expect('.other-selector')
           .to.be[method]()
           .to.be.rejectedWith(
@@ -75,29 +75,25 @@ export const booleanAssertionTest = ({
       })
     })
     describe('When negated', () => {
-      it(`rejects when element is ${expectation}`, async function() {
+      it(`rejects when element is ${expectation}`, async function () {
         fakeElement1[`is${upperFirst(method)}`].resolves(true)
         await expect(
-          expect('.some-selector')
-            .not.to.be[method]()
-            .then(null)
+          expect('.some-selector').not.to.be[method]().then(null)
         ).to.be.rejectedWith(
           `Expected element <.some-selector> to not be ${expectation} but it is`
         )
       })
-      it(`resolves when element is not ${expectation}`, async function() {
+      it(`resolves when element is not ${expectation}`, async function () {
         await expect('.some-selector').not.to.be[method]()
       })
       if (allowNone) {
-        it(`resolves when element does not exist`, async function() {
+        it(`resolves when element does not exist`, async function () {
           await expect(expect('.other-selector').not.to.be[method]())
         })
       } else {
-        it(`rejects when element does not exist`, async function() {
+        it(`rejects when element does not exist`, async function () {
           await expect(
-            expect('.other-selector')
-              .not.to.be[method]()
-              .then(null)
+            expect('.other-selector').not.to.be[method]().then(null)
           ).to.be.rejectedWith(
             `Expected element <.other-selector> to not be ${expectation} but no matching elements were found`
           )

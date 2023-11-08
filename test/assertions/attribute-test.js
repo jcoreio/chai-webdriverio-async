@@ -18,13 +18,13 @@ describe('attribute', () => {
     fakeElement2.__resetStubs__()
   })
 
-  describe(`When element doesn't exist`, function() {
+  describe(`When element doesn't exist`, function () {
     beforeEach(() => {
       fakeClient.$$.withArgs('.some-selector').resolves([])
     })
 
-    describe('When not negated', function() {
-      it(`should reject`, async function() {
+    describe('When not negated', function () {
+      it(`should reject`, async function () {
         await expect('.some-selector')
           .to.have.attribute('foo')
           .to.be.rejectedWith(
@@ -37,12 +37,10 @@ describe('attribute', () => {
           )
       })
     })
-    describe('When negated', function() {
-      it(`should reject`, async function() {
+    describe('When negated', function () {
+      it(`should reject`, async function () {
         await expect(
-          expect('.some-selector')
-            .to.not.have.attribute('foo')
-            .then(null)
+          expect('.some-selector').to.not.have.attribute('foo').then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to not have attribute foo, but no matching elements were found'
         )
@@ -66,45 +64,39 @@ describe('attribute', () => {
       fakeClient.$$.withArgs('.some-selector').resolves([fakeElement1])
     })
 
-    describe(`When not negated`, function() {
-      it(`should resolve when attribute is present`, async function() {
+    describe(`When not negated`, function () {
+      it(`should resolve when attribute is present`, async function () {
         await expect('.some-selector').to.have.attribute('foo')
       })
-      it(`should resolve when attribute equals expectation`, async function() {
+      it(`should resolve when attribute equals expectation`, async function () {
         await expect('.some-selector').to.have.attribute(
           'foo',
           elementAttribute
         )
       })
-      it(`should resolve when attribute matches expectation`, async function() {
+      it(`should resolve when attribute matches expectation`, async function () {
         await expect('.some-selector').to.have.attribute('foo', /give you up/)
       })
-      it(`should reject when attribute is missing`, async function() {
+      it(`should reject when attribute is missing`, async function () {
         await expect(
-          expect('.some-selector')
-            .to.have.attribute('bar')
-            .then(null)
+          expect('.some-selector').to.have.attribute('bar').then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to have attribute bar, but only found: '
         )
         await expect(
-          expect('.some-selector')
-            .to.have.attribute('bar', 'baz')
-            .then(null)
+          expect('.some-selector').to.have.attribute('bar', 'baz').then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to have attribute bar with value "baz", but only found: '
         )
       })
-      it(`should reject when attribute doesn't equal expectation`, async function() {
+      it(`should reject when attribute doesn't equal expectation`, async function () {
         await expect(
-          expect('.some-selector')
-            .to.have.attribute('foo', 'blah')
-            .then(null)
+          expect('.some-selector').to.have.attribute('foo', 'blah').then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to have attribute foo with value "blah", but only found: "Never gonna give you up"'
         )
       })
-      it(`should reject when attribute doesn't match expectation`, async function() {
+      it(`should reject when attribute doesn't match expectation`, async function () {
         await expect(
           expect('.some-selector')
             .to.have.attribute('foo', /^gonna/)
@@ -115,27 +107,25 @@ describe('attribute', () => {
       })
     })
 
-    describe(`When negated`, function() {
-      it(`should resolve when attribute is missing`, async function() {
+    describe(`When negated`, function () {
+      it(`should resolve when attribute is missing`, async function () {
         await expect('.some-selector').to.not.have.attribute('bar')
         await expect('.some-selector').to.not.have.attribute('bar', 'blargh')
       })
-      it(`should resolve when attribute doesn't equal expectation`, async function() {
+      it(`should resolve when attribute doesn't equal expectation`, async function () {
         await expect('.some-selector').to.not.have.attribute('foo', 'blargh')
       })
-      it(`should resolve when attribute doesn't match expectation`, async function() {
+      it(`should resolve when attribute doesn't match expectation`, async function () {
         await expect('.some-selector').to.not.have.attribute('foo', /foog/)
       })
-      it(`should reject when attribute is not missing`, async function() {
+      it(`should reject when attribute is not missing`, async function () {
         await expect(
-          expect('.some-selector')
-            .to.not.have.attribute('foo')
-            .then(null)
+          expect('.some-selector').to.not.have.attribute('foo').then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to not have attribute foo, but found: "Never gonna give you up"'
         )
       })
-      it(`should reject when attribute equals expectation`, async function() {
+      it(`should reject when attribute equals expectation`, async function () {
         await expect(
           expect('.some-selector')
             .to.not.have.attribute('foo', elementAttribute)
@@ -144,7 +134,7 @@ describe('attribute', () => {
           `Expected element <.some-selector> to not have attribute foo with value "Never gonna give you up", but found: "Never gonna give you up"`
         )
       })
-      it(`should reject when attribute matches expectation`, async function() {
+      it(`should reject when attribute matches expectation`, async function () {
         await expect(
           expect('.some-selector')
             .to.not.have.attribute('foo', /gonna/)
@@ -155,7 +145,7 @@ describe('attribute', () => {
       })
     })
   })
-  describe(`When multiple elements exist`, function() {
+  describe(`When multiple elements exist`, function () {
     let elementAttribute1 = 'Never gonna give you up'
     let elementAttribute2 = 'Never gonna let you down'
 
@@ -172,11 +162,11 @@ describe('attribute', () => {
       ])
     })
 
-    describe(`When not negated`, function() {
-      it(`should resolve when attribute is present`, async function() {
+    describe(`When not negated`, function () {
+      it(`should resolve when attribute is present`, async function () {
         await expect('.some-selector').to.have.attribute('foo')
       })
-      it(`should resolve when attribute equals expectation`, async function() {
+      it(`should resolve when attribute equals expectation`, async function () {
         await expect('.some-selector').to.have.attribute(
           'foo',
           elementAttribute1
@@ -186,37 +176,31 @@ describe('attribute', () => {
           elementAttribute2
         )
       })
-      it(`should resolve when attribute matches expectation`, async function() {
+      it(`should resolve when attribute matches expectation`, async function () {
         await expect('.some-selector').to.have.attribute('foo', /Never gonna/)
         await expect('.some-selector').to.have.attribute('foo', /give you up/)
         await expect('.some-selector').to.have.attribute('foo', /let you down/)
       })
-      it(`should reject when attribute is missing`, async function() {
+      it(`should reject when attribute is missing`, async function () {
         await expect(
-          expect('.some-selector')
-            .to.have.attribute('bar')
-            .then(null)
+          expect('.some-selector').to.have.attribute('bar').then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to have attribute bar, but only found: '
         )
         await expect(
-          expect('.some-selector')
-            .to.have.attribute('bar', 'blargh')
-            .then(null)
+          expect('.some-selector').to.have.attribute('bar', 'blargh').then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to have attribute bar with value "blargh", but only found: '
         )
       })
-      it(`should reject when attribute doesn't equal expectation`, async function() {
+      it(`should reject when attribute doesn't equal expectation`, async function () {
         await expect(
-          expect('.some-selector')
-            .to.have.attribute('foo', 'blah')
-            .then(null)
+          expect('.some-selector').to.have.attribute('foo', 'blah').then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to have attribute foo with value "blah", but only found: "Never gonna give you up", "Never gonna let you down"'
         )
       })
-      it(`should reject when attribute doesn't match expectation`, async function() {
+      it(`should reject when attribute doesn't match expectation`, async function () {
         await expect(
           expect('.some-selector')
             .to.have.attribute('foo', /^gonna/)
@@ -226,27 +210,25 @@ describe('attribute', () => {
         )
       })
     })
-    describe(`When negated`, function() {
-      it(`should resolve when attribute is missing`, async function() {
+    describe(`When negated`, function () {
+      it(`should resolve when attribute is missing`, async function () {
         await expect('.some-selector').to.not.have.attribute('bar')
         await expect('.some-selector').to.not.have.attribute('bar', 'blargh')
       })
-      it(`should resolve when attribute doesn't equal expectation`, async function() {
+      it(`should resolve when attribute doesn't equal expectation`, async function () {
         await expect('.some-selector').to.not.have.attribute('foo', 'blargh')
       })
-      it(`should resolve when attribute doesn't match expectation`, async function() {
+      it(`should resolve when attribute doesn't match expectation`, async function () {
         await expect('.some-selector').to.not.have.attribute('foo', /foog/)
       })
-      it(`should reject when attribute is not missing`, async function() {
+      it(`should reject when attribute is not missing`, async function () {
         await expect(
-          expect('.some-selector')
-            .to.not.have.attribute('foo')
-            .then(null)
+          expect('.some-selector').to.not.have.attribute('foo').then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to not have attribute foo, but found: "Never gonna give you up", "Never gonna let you down"'
         )
       })
-      it(`should reject when attribute equals expectation`, async function() {
+      it(`should reject when attribute equals expectation`, async function () {
         for (const attribute of [elementAttribute1, elementAttribute2]) {
           await expect(
             expect('.some-selector')
@@ -259,7 +241,7 @@ describe('attribute', () => {
           )
         }
       })
-      it(`should reject when attribute matches expectation`, async function() {
+      it(`should reject when attribute matches expectation`, async function () {
         await expect(
           expect('.some-selector')
             .to.not.have.attribute('foo', /gonna/)

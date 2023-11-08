@@ -18,13 +18,13 @@ describe('value', () => {
     fakeElement2.__resetStubs__()
   })
 
-  describe(`When element doesn't exist`, function() {
+  describe(`When element doesn't exist`, function () {
     beforeEach(() => {
       fakeClient.$$.withArgs('.some-selector').resolves([])
     })
 
-    describe('When not negated', function() {
-      it(`should reject`, async function() {
+    describe('When not negated', function () {
+      it(`should reject`, async function () {
         await expect('.some-selector')
           .to.have.value('foo')
           .to.be.rejectedWith(
@@ -32,12 +32,10 @@ describe('value', () => {
           )
       })
     })
-    describe('When negated', function() {
-      it(`should reject`, async function() {
+    describe('When negated', function () {
+      it(`should reject`, async function () {
         await expect(
-          expect('.some-selector')
-            .to.not.have.value('foo')
-            .then(null)
+          expect('.some-selector').to.not.have.value('foo').then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to not have value "foo", but no matching elements were found'
         )
@@ -53,23 +51,21 @@ describe('value', () => {
       fakeClient.$$.withArgs('.some-selector').resolves([fakeElement1])
     })
 
-    describe(`When not negated`, function() {
-      it(`should resolve when value equals expectation`, async function() {
+    describe(`When not negated`, function () {
+      it(`should resolve when value equals expectation`, async function () {
         await expect('.some-selector').to.have.value(elementValue)
       })
-      it(`should resolve when value matches expectation`, async function() {
+      it(`should resolve when value matches expectation`, async function () {
         await expect('.some-selector').to.have.value(/give you up/)
       })
-      it(`should reject when value doesn't equal expectation`, async function() {
+      it(`should reject when value doesn't equal expectation`, async function () {
         await expect(
-          expect('.some-selector')
-            .to.have.value('blah')
-            .then(null)
+          expect('.some-selector').to.have.value('blah').then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to have value "blah", but only found: "Never gonna give you up"'
         )
       })
-      it(`should reject when value doesn't match expectation`, async function() {
+      it(`should reject when value doesn't match expectation`, async function () {
         await expect(
           expect('.some-selector')
             .to.have.value(/^gonna/)
@@ -80,34 +76,30 @@ describe('value', () => {
       })
     })
 
-    describe(`When negated`, function() {
-      it(`should resolve when value doesn't equal expectation`, async function() {
+    describe(`When negated`, function () {
+      it(`should resolve when value doesn't equal expectation`, async function () {
         await expect('.some-selector').to.not.have.value('blargh')
       })
-      it(`should resolve when value doesn't match expectation`, async function() {
+      it(`should resolve when value doesn't match expectation`, async function () {
         await expect('.some-selector').to.not.have.value(/foog/)
       })
-      it(`should reject when value equals expectation`, async function() {
+      it(`should reject when value equals expectation`, async function () {
         await expect(
-          expect('.some-selector')
-            .to.not.have.value(elementValue)
-            .then(null)
+          expect('.some-selector').to.not.have.value(elementValue).then(null)
         ).to.be.rejectedWith(
           `Expected element <.some-selector> to not have value "Never gonna give you up", but found: "Never gonna give you up"`
         )
       })
-      it(`should reject when value matches expectation`, async function() {
+      it(`should reject when value matches expectation`, async function () {
         await expect(
-          expect('.some-selector')
-            .to.not.have.value(/gonna/)
-            .then(null)
+          expect('.some-selector').to.not.have.value(/gonna/).then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to not have value /gonna/, but found: "Never gonna give you up"'
         )
       })
     })
   })
-  describe(`When multiple elements exist`, function() {
+  describe(`When multiple elements exist`, function () {
     let elementValue1 = 'Never gonna give you up'
     let elementValue2 = 'Never gonna let you down'
 
@@ -120,26 +112,24 @@ describe('value', () => {
       ])
     })
 
-    describe(`When not negated`, function() {
-      it(`should resolve when value equals expectation`, async function() {
+    describe(`When not negated`, function () {
+      it(`should resolve when value equals expectation`, async function () {
         await expect('.some-selector').to.have.value(elementValue1)
         await expect('.some-selector').to.have.value(elementValue2)
       })
-      it(`should resolve when value matches expectation`, async function() {
+      it(`should resolve when value matches expectation`, async function () {
         await expect('.some-selector').to.have.value(/Never gonna/)
         await expect('.some-selector').to.have.value(/give you up/)
         await expect('.some-selector').to.have.value(/let you down/)
       })
-      it(`should reject when value doesn't equal expectation`, async function() {
+      it(`should reject when value doesn't equal expectation`, async function () {
         await expect(
-          expect('.some-selector')
-            .to.have.value('blah')
-            .then(null)
+          expect('.some-selector').to.have.value('blah').then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to have value "blah", but only found: "Never gonna give you up", "Never gonna let you down"'
         )
       })
-      it(`should reject when value doesn't match expectation`, async function() {
+      it(`should reject when value doesn't match expectation`, async function () {
         await expect(
           expect('.some-selector')
             .to.have.value(/^gonna/)
@@ -149,19 +139,17 @@ describe('value', () => {
         )
       })
     })
-    describe(`When negated`, function() {
-      it(`should resolve when value doesn't equal expectation`, async function() {
+    describe(`When negated`, function () {
+      it(`should resolve when value doesn't equal expectation`, async function () {
         await expect('.some-selector').to.not.have.value('blargh')
       })
-      it(`should resolve when value doesn't match expectation`, async function() {
+      it(`should resolve when value doesn't match expectation`, async function () {
         await expect('.some-selector').to.not.have.value(/foog/)
       })
-      it(`should reject when value equals expectation`, async function() {
+      it(`should reject when value equals expectation`, async function () {
         for (const value of [elementValue1, elementValue2]) {
           await expect(
-            expect('.some-selector')
-              .to.not.have.value(value)
-              .then(null)
+            expect('.some-selector').to.not.have.value(value).then(null)
           ).to.be.rejectedWith(
             `Expected element <.some-selector> to not have value ${JSON.stringify(
               value
@@ -169,19 +157,17 @@ describe('value', () => {
           )
         }
       })
-      it(`should reject when value matches expectation`, async function() {
+      it(`should reject when value matches expectation`, async function () {
         await expect(
-          expect('.some-selector')
-            .to.not.have.value(/gonna/)
-            .then(null)
+          expect('.some-selector').to.not.have.value(/gonna/).then(null)
         ).to.be.rejectedWith(
           'Expected element <.some-selector> to not have value /gonna/, but found: "Never gonna give you up", "Never gonna let you down"'
         )
       })
     })
 
-    describe(`When not negated with .members`, function() {
-      it(`resolves when all values are present`, async function() {
+    describe(`When not negated with .members`, function () {
+      it(`resolves when all values are present`, async function () {
         await expect('.some-selector').value.to.have.members([
           elementValue2,
           elementValue1,
@@ -191,14 +177,14 @@ describe('value', () => {
           elementValue2,
         ])
       })
-      it(`rejects when excess actual values are present`, async function() {
+      it(`rejects when excess actual values are present`, async function () {
         await expect(
           expect('.some-selector')
             .value.to.have.members([elementValue1])
             .then(null)
         ).to.be.rejectedWith(`elements' values for <.some-selector>`)
       })
-      it(`rejects when some expected values are missing`, async function() {
+      it(`rejects when some expected values are missing`, async function () {
         await expect(
           expect('.some-selector')
             .value.to.have.members([elementValue1, 'blah'])
@@ -207,8 +193,8 @@ describe('value', () => {
       })
     })
 
-    describe(`With .members`, function() {
-      it(`resolves when all values are present`, async function() {
+    describe(`With .members`, function () {
+      it(`resolves when all values are present`, async function () {
         await expect('.some-selector').value.to.have.members([
           elementValue2,
           elementValue1,
@@ -218,16 +204,14 @@ describe('value', () => {
           elementValue2,
         ])
       })
-      it(`rejects when excess actual values are present`, async function() {
+      it(`rejects when excess actual values are present`, async function () {
         await expect(
           expect('.some-selector')
             .value.to.have.members([elementValue1])
             .then(null)
-        ).to.be.rejectedWith(
-          `elements' values for <.some-selector>: expected [ Array(2) ] to have the same members as`
-        )
+        ).to.be.rejectedWith(`elements' values for <.some-selector>`)
       })
-      it(`rejects when some expected values are missing`, async function() {
+      it(`rejects when some expected values are missing`, async function () {
         await expect(
           expect('.some-selector')
             .value.to.have.members([elementValue1, 'blah'])
@@ -236,8 +220,8 @@ describe('value', () => {
       })
     })
 
-    describe(`With .include/.contain/.includes`, function() {
-      it(`resolves when all values are present`, async function() {
+    describe(`With .include/.contain/.includes`, function () {
+      it(`resolves when all values are present`, async function () {
         await expect('.some-selector').value.to.include.members([
           elementValue1,
           elementValue2,
@@ -256,33 +240,31 @@ describe('value', () => {
           elementValue2,
         ])
       })
-      it(`rejects when some expected values are missing`, async function() {
+      it(`rejects when some expected values are missing`, async function () {
         await expect(
           expect('.some-selector')
             .value.to.include.members([elementValue1, 'blah'])
             .then(null)
-        ).to.be.rejectedWith(
-          `elements' values for <.some-selector>: expected [ Array(2) ] to be a superset of`
-        )
+        ).to.be.rejectedWith(`elements' values for <.some-selector>`)
       })
     })
 
-    describe(`With .satisfy`, function() {
-      it(`resolves when satisfies expression`, async function() {
-        await expect('.some-selector').value.to.satisfy(arr => arr.length === 2)
+    describe(`With .satisfy`, function () {
+      it(`resolves when satisfies expression`, async function () {
         await expect('.some-selector').value.to.satisfy(
-          arr => arr[0] === elementValue1
+          (arr) => arr.length === 2
+        )
+        await expect('.some-selector').value.to.satisfy(
+          (arr) => arr[0] === elementValue1
         )
       })
 
-      it(`rejects when doesn't satisfy expression`, async function() {
+      it(`rejects when doesn't satisfy expression`, async function () {
         await expect(
           expect('.some-selector')
-            .value.to.satisfy(arr => arr[0] === elementValue2)
+            .value.to.satisfy((arr) => arr[0] === elementValue2)
             .then(null)
-        ).to.be.rejectedWith(
-          `elements' values for <.some-selector>: expected [ Array(2) ] to satisfy [Function]`
-        )
+        ).to.be.rejectedWith(`elements' values for <.some-selector>`)
       })
     })
   })

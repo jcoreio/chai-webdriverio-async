@@ -7,7 +7,7 @@ export default class FakeElement {
   constructor() {
     const fakeElement = {}
     Object.keys(elementPrototype).forEach(
-      key => (fakeElement[key] = sinon.stub())
+      (key) => (fakeElement[key] = sinon.stub())
     )
 
     Object.assign(this, fakeElement)
@@ -15,7 +15,7 @@ export default class FakeElement {
 
   __resetStubs__() {
     Object.keys(this)
-      .filter(key => key.substring(0, 1) !== '__')
-      .forEach(key => this[key].reset())
+      .filter((key) => key.substring(0, 1) !== '__')
+      .forEach((key) => this[key].reset())
   }
 }

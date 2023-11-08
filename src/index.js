@@ -10,7 +10,7 @@ import selected from './assertions/selected'
 import text from './assertions/text'
 import value from './assertions/value'
 
-export default function(client, options = {}) {
+export default function (client, options = {}) {
   return function chaiWebdriverIO(chai, utils) {
     const { Assertion } = chai
 
@@ -34,7 +34,7 @@ export default function(client, options = {}) {
       if (typeof method.chain === 'function') {
         Assertion.addChainableMethod(
           name,
-          function() {
+          function () {
             const promise = method.apply(this, arguments)
             this._obj = promise
             this.then = promise.then.bind(promise)
@@ -43,7 +43,7 @@ export default function(client, options = {}) {
           method.chain
         )
       } else {
-        Assertion.addMethod(name, function() {
+        Assertion.addMethod(name, function () {
           const promise = method.apply(this, arguments)
           this._obj = promise
           this.then = promise.then.bind(promise)
@@ -53,7 +53,7 @@ export default function(client, options = {}) {
     }
 
     function overwriteMethod(name, handler) {
-      Assertion.overwriteMethod(name, function(_super) {
+      Assertion.overwriteMethod(name, function (_super) {
         return function chaiWebdriverIOAssertion(...args) {
           const ourFlag = utils.flag(this, 'chai-webdriverio-async')
           if (ourFlag) {
@@ -113,77 +113,72 @@ export default function(client, options = {}) {
       Assertion.overwriteChainableMethod(
         name,
         defaultOverwriteAssert,
-        chain => chain
+        (chain) => chain
       )
     }
 
-    overwriteMethod('above', function assertAbove({
-      value,
-      selector,
-      args: [n],
-    }) {
-      this.assert(
-        value > n,
-        `Expected <${selector}> to appear in the DOM more than #{exp} times, but it shows up #{act} times instead.`,
-        `Expected <${selector}> not to appear in the DOM more than #{exp} times, but it shows up #{act} times instead.`,
-        n,
-        value
-      )
-    })
+    overwriteMethod(
+      'above',
+      function assertAbove({ value, selector, args: [n] }) {
+        this.assert(
+          value > n,
+          `Expected <${selector}> to appear in the DOM more than #{exp} times, but it shows up #{act} times instead.`,
+          `Expected <${selector}> not to appear in the DOM more than #{exp} times, but it shows up #{act} times instead.`,
+          n,
+          value
+        )
+      }
+    )
 
-    overwriteMethod('least', function assertAtLeast({
-      value,
-      selector,
-      args: [n],
-    }) {
-      this.assert(
-        value >= n,
-        `Expected <${selector}> to appear in the DOM at least #{exp} times, but it shows up #{act} times instead.`,
-        `Expected <${selector}> not to appear in the DOM at least #{exp} times, but it shows up #{act} times instead.`,
-        n,
-        value
-      )
-    })
+    overwriteMethod(
+      'least',
+      function assertAtLeast({ value, selector, args: [n] }) {
+        this.assert(
+          value >= n,
+          `Expected <${selector}> to appear in the DOM at least #{exp} times, but it shows up #{act} times instead.`,
+          `Expected <${selector}> not to appear in the DOM at least #{exp} times, but it shows up #{act} times instead.`,
+          n,
+          value
+        )
+      }
+    )
 
-    overwriteMethod('below', function assertBelow({
-      value,
-      selector,
-      args: [n],
-    }) {
-      this.assert(
-        value < n,
-        `Expected <${selector}> to appear in the DOM less than #{exp} times, but it shows up #{act} times instead.`,
-        `Expected <${selector}> not to appear in the DOM less than #{exp} times, but it shows up #{act} times instead.`,
-        n,
-        value
-      )
-    })
+    overwriteMethod(
+      'below',
+      function assertBelow({ value, selector, args: [n] }) {
+        this.assert(
+          value < n,
+          `Expected <${selector}> to appear in the DOM less than #{exp} times, but it shows up #{act} times instead.`,
+          `Expected <${selector}> not to appear in the DOM less than #{exp} times, but it shows up #{act} times instead.`,
+          n,
+          value
+        )
+      }
+    )
 
-    overwriteMethod('most', function assertAtMost({
-      value,
-      selector,
-      args: [n],
-    }) {
-      this.assert(
-        value <= n,
-        `Expected <${selector}> to appear in the DOM at most #{exp} times, but it shows up #{act} times instead.`,
-        `Expected <${selector}> not to appear in the DOM at most #{exp} times, but it shows up #{act} times instead.`,
-        n,
-        value
-      )
-    })
+    overwriteMethod(
+      'most',
+      function assertAtMost({ value, selector, args: [n] }) {
+        this.assert(
+          value <= n,
+          `Expected <${selector}> to appear in the DOM at most #{exp} times, but it shows up #{act} times instead.`,
+          `Expected <${selector}> not to appear in the DOM at most #{exp} times, but it shows up #{act} times instead.`,
+          n,
+          value
+        )
+      }
+    )
 
-    overwriteMethod('within', function assertAtMost({
-      value,
-      selector,
-      args: [lower, upper],
-    }) {
-      this.assert(
-        value >= lower && value <= upper,
-        `Expected <${selector}> to appear in the DOM between ${lower} and ${upper} times, but it shows up ${value} times instead.`,
-        `Expected <${selector}> not to appear in the DOM between ${lower} and ${upper} times, but it shows up ${value} times instead.`
-      )
-    })
+    overwriteMethod(
+      'within',
+      function assertAtMost({ value, selector, args: [lower, upper] }) {
+        this.assert(
+          value >= lower && value <= upper,
+          `Expected <${selector}> to appear in the DOM between ${lower} and ${upper} times, but it shows up ${value} times instead.`,
+          `Expected <${selector}> not to appear in the DOM between ${lower} and ${upper} times, but it shows up ${value} times instead.`
+        )
+      }
+    )
 
     defaultOverwriteMethod('members')
     defaultOverwriteMethod('oneOf')

@@ -7,6 +7,6 @@
 import booleanAssertion from './booleanAssertion'
 
 export default booleanAssertion({
-  predicate: el => el.isClickable(),
+  predicate: (el) => el.isClickable(),
   expectation: 'clickable',
 })
