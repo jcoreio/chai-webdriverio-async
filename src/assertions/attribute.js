@@ -15,13 +15,11 @@ const attribute = (client, chai, utils, options) =>
       client
     )
     if (arguments.length === 1) {
-      if (!elements.length) {
-        throw new chai.AssertionError(
-          negate
-            ? `Expected element <${selector}> to not have attribute ${attribute}, but no matching elements were found`
-            : `Expected element <${selector}> to have attribute ${attribute}, but no matching elements were found`
-        )
-      }
+      this.assert(
+        negate ^ (elements.length > 0),
+        `Expected element <${selector}> to have attribute ${attribute}, but no matching elements were found`,
+        `Expected element <${selector}> to not have attribute ${attribute}, but no matching elements were found`
+      )
 
       const values = []
       const filteredList = (
@@ -49,13 +47,11 @@ const attribute = (client, chai, utils, options) =>
     const expectedStr =
       typeof expected === 'string' ? JSON.stringify(expected) : expected
 
-    if (!elements.length) {
-      throw new chai.AssertionError(
-        negate
-          ? `Expected element <${selector}> to not have attribute ${attribute} with value ${expectedStr}, but no matching elements were found`
-          : `Expected element <${selector}> to have attribute ${attribute} with value ${expectedStr}, but no matching elements were found`
-      )
-    }
+    this.assert(
+      negate ^ (elements.length > 0),
+      `Expected element <${selector}> to have attribute ${attribute} with value ${expectedStr}, but no matching elements were found`,
+      `Expected element <${selector}> to not have attribute ${attribute} with value ${expectedStr}, but no matching elements were found`
+    )
 
     const values = []
     const filteredList = (

@@ -1,8 +1,10 @@
 import chai, { expect } from 'chai'
+import chaiAsPromised from 'chai-as-promised'
 import fakeClient from './stubs/fakeClient'
 import { beforeEach, describe, it } from 'mocha'
 import chaiWebdriverio from '../src'
-
+chai.config.includeStack = true
+chai.use(chaiAsPromised)
 chai.use(chaiWebdriverio(fakeClient))
 
 beforeEach(() => {

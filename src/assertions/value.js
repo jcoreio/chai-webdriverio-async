@@ -16,13 +16,11 @@ const value = (client, chai, utils, options) => {
     const expectedStr =
       typeof expected === 'string' ? JSON.stringify(expected) : expected
 
-    if (!values.length) {
-      throw new chai.AssertionError(
-        negate
-          ? `Expected element <${selector}> to not have value ${expectedStr}, but no matching elements were found`
-          : `Expected element <${selector}> to have value ${expectedStr}, but no matching elements were found`
-      )
-    }
+    this.assert(
+      negate ^ (values.length > 0),
+      `Expected element <${selector}> to have value ${expectedStr}, but no matching elements were found`,
+      `Expected element <${selector}> to not have value ${expectedStr}, but no matching elements were found`
+    )
 
     const filteredList = values.filter((value) =>
       expected instanceof RegExp ? value.match(expected) : value === expected

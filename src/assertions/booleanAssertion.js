@@ -16,13 +16,11 @@ const booleanAssertion =
         utils.flag(this, 'object'),
         client
       )
-      if (!allowNone && !elements.length) {
-        throw new chai.AssertionError(
-          negate
-            ? `Expected element <${selector}> to not be ${expectation} but no matching elements were found`
-            : `Expected element <${selector}> to be ${expectation} but no matching elements were found`
-        )
-      }
+      this.assert(
+        negate ^ (allowNone || elements.length > 0),
+        `Expected element <${selector}> to be ${expectation} but no matching elements were found`,
+        `Expected element <${selector}> to not be ${expectation} but no matching elements were found`
+      )
 
       const filteredList = (await Promise.all(elements.map(predicate))).filter(
         Boolean
