@@ -258,33 +258,45 @@ declare namespace Chai {
       TypeComparison {
     attribute(name: string, value?: string | RegExp): ResolvedPromisedAssertion
     clickable(): ResolvedPromisedAssertion
-    count(): ResolvedPromisedAssertion
-    count(expected: number): ResolvedPromisedAssertion
+    count: ResolvedPromisedAssertion & {
+      (): ResolvedPromisedAssertion
+      (expected: number): ResolvedPromisedAssertion
+    }
     existing(): ResolvedPromisedAssertion
     displayed(): ResolvedPromisedAssertion
     displayedInViewport(): ResolvedPromisedAssertion
     enabled(): ResolvedPromisedAssertion
     focused(): ResolvedPromisedAssertion
     selected(): ResolvedPromisedAssertion
-    text(): ResolvedPromisedAssertion
-    text(val: string | RegExp): ResolvedPromisedAssertion
-    value(): ResolvedPromisedAssertion
-    value(val: string | RegExp): ResolvedPromisedAssertion
+    text: ResolvedPromisedAssertion & {
+      (): ResolvedPromisedAssertion
+      (val: string | RegExp): ResolvedPromisedAssertion
+    }
+    value: ResolvedPromisedAssertion & {
+      (): ResolvedPromisedAssertion
+      (val: string | RegExp): ResolvedPromisedAssertion
+    }
   }
   interface PromisedAssertion extends Eventually, PromiseLike<any> {
     attribute(name: string, value?: string | RegExp): ResolvedPromisedAssertion
     clickable(): ResolvedPromisedAssertion
-    count(): ResolvedPromisedAssertion
-    count(expected: number): ResolvedPromisedAssertion
+    count: ResolvedPromisedAssertion & {
+      (): ResolvedPromisedAssertion
+      (expected: number): ResolvedPromisedAssertion
+    }
     existing(): ResolvedPromisedAssertion
     displayed(): ResolvedPromisedAssertion
     displayedInViewport(): ResolvedPromisedAssertion
     enabled(): ResolvedPromisedAssertion
     focused(): ResolvedPromisedAssertion
     selected(): ResolvedPromisedAssertion
-    text(): ResolvedPromisedAssertion
-    text(val: string | RegExp): ResolvedPromisedAssertion
-    value(): ResolvedPromisedAssertion
-    value(val: string | RegExp): ResolvedPromisedAssertion
+    text: ResolvedPromisedAssertion & {
+      (): ResolvedPromisedAssertion
+      (val: string | RegExp): ResolvedPromisedAssertion
+    }
+    value: ResolvedPromisedAssertion & {
+      (): ResolvedPromisedAssertion
+      (val: string | RegExp): ResolvedPromisedAssertion
+    }
   }
 }
