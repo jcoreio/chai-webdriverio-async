@@ -17,14 +17,7 @@ declare module 'chai-webdriverio-async' {
   }
 
   export type ChaiWebdriverioAsyncOptions = {
-    $: (selector: string | Function) => Element
-    $$: (selector: string | Function) => Element[]
-    waitUntil: (
-      condition: () => Promise<boolean>,
-      timeout?: number,
-      timeoutMsg?: string,
-      interval?: number
-    ) => Promise<boolean>
+    $$: (selector: string) => PromiseLike<Element[]>
   }
 
   export default function chaiWebdriverioAsync(
