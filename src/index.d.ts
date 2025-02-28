@@ -3,11 +3,28 @@
 /// <reference types="chai" />
 
 declare module 'chai-webdriverio-async' {
-  import { Browser } from 'webdriverio'
+  interface Element {
+    getAttribute(attributeName: string): Promise<string>
+    getText(): Promise<string>
+    getValue(): Promise<string>
+    isClickable(): Promise<boolean>
+    isDisplayed(): Promise<boolean>
+    isDisplayedInViewport(): Promise<boolean>
+    isEnabled(): Promise<boolean>
+    isExisting(): Promise<boolean>
+    isFocused(): Promise<boolean>
+    isSelected(): Promise<boolean>
+  }
+
   export type ChaiWebdriverioAsyncOptions = {
-    $: Browser['$']
-    $$: Browser['$$']
-    waitUntil: Browser['waitUntil']
+    $: (selector: string | Function) => Element
+    $$: (selector: string | Function) => Element[]
+    waitUntil: (
+      condition: () => Promise<boolean>,
+      timeout?: number,
+      timeoutMsg?: string,
+      interval?: number
+    ) => Promise<boolean>
   }
 
   export default function chaiWebdriverioAsync(
